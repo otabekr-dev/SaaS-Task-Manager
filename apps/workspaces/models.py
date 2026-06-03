@@ -11,6 +11,9 @@ class WorkSpace(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.id}.{self.name}'
+
 
 class WorkSpaceMember(models.Model):
     class Role(models.TextChoices):
@@ -26,3 +29,7 @@ class WorkSpaceMember(models.Model):
 
     class Meta:
         unique_together = ['user', 'workspace']
+
+
+    def __str__(self):
+        return f'{self.id}.{self.user}'    
