@@ -145,7 +145,7 @@ class WorkSpaceMemberDetaiView(APIView):
 
         member.role = new_role
         member.save()
-        serializer = WorkSpaceMember(member)
+        serializer = WorkSpaceMemberSerializer(member)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request: Request, workspace_id: int, user_id: int) -> Response:

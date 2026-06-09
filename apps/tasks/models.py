@@ -18,3 +18,11 @@ class Task(models.Model):
     status = models.CharField(choices=Status.choices, default=Status.TODO)    
 
     created_at = models.DateTimeField(auto_now_add=True)    
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
