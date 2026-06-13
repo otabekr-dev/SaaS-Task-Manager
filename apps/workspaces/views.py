@@ -10,6 +10,10 @@ from django.shortcuts import get_object_or_404
 from .serializers import WorkSpaceSerializer, WorkSpaceMemberSerializer
 from .permissions import IsWorkSpaceOwner, IsWorkSpaceAdminOrOwner
 
+from apps.projects.models import Project
+from apps.tasks.models import Task
+from django.db.models import Count
+
 User = get_user_model()
 
 
@@ -160,3 +164,21 @@ class WorkSpaceMemberDetaiView(APIView):
         member.delete()
         return Response('DELETED',status=status.HTTP_200_OK)
             
+
+class StatView(APIView):
+    permission_classes = [IsWorkSpaceAdminOrOwner]
+
+    def get(self, request: Request, workspace_id: int) -> Response:
+        total_members = WorkSpaceMember.objects.filter(workspace_id=workspace_id).count()
+        total_projects = Project.objects.filter(workspace_id=workspace_id).count()
+        total_tasks = Task.objects.filter(project__workspace_id=workspace_id).count()
+        tasks_by_status = Task.objects.filter(project__workspace_id=workspace_id).values('status').annotate(count=(Count('id')))
+
+        return Response(
+            {
+                "total_members": total_members,
+                "total_projects": total_projects,
+                "total_tasks": total_tasks,
+                "tasks_by_status": tasks_by_status
+            }
+        )

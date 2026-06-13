@@ -48,19 +48,19 @@ class TaskDetailView(APIView):
         return get_object_or_404(Task, id=task_id)
     
 
-    def get(self, request: Request, workspace_id:int, task_id:int) -> Response:
+    def get(self, request: Request, workspace_id: int, project_id: int, task_id: int) -> Response:
         task = self.get_object(task_id=task_id)
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def patch(self, request: Request, workspace_id: int, task_id: int) -> Response:
+    def patch(self, request: Request, workspace_id: int, project_id: int, task_id: int) -> Response:
         task = self.get_object(task_id=task_id)
         serializer = TaskSerializer(task, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def delete(self, request: Request, workspace_id: int, task_id: int) -> Response:
+    def delete(self, request: Request, workspace_id: int, project_id: int, task_id: int) -> Response:
         task = self.get_object(task_id=task_id)
 
         task.delete()
@@ -92,8 +92,25 @@ class CommentDetailView(APIView):
 
     permission_classes = [IsCommentOwner]
 
-    def delete(self, request: Request, comment_id:int) -> Response:
+    def delete(self, request: Request, workspace_id: int, project_id: int, task_id: int, comment_id: int) -> Response:
         comment = get_object_or_404(Comment, id=comment_id)
 
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)        
+
+
+class AssignTaskView(APIView):
+    permission_classes = [IsWorkSpaceAdminOrOwner]
+
+
+    def patch(self, request: Request, workspace_id: int, project_id: int, task_id: int) -> Response:
+        task = get_object_or_404(Task, id=task_id)
+
+        assigned_to = request.data.get('assigned_to')
+        if not assigned_to:
+            return Response('Error', status=status.HTTP_400_BAD_REQUEST)
+        
+        task.assigned_to_id = assigned_to
+        task.save()
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
