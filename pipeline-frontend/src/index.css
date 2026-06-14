@@ -1,0 +1,56 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-cream: #F6F4ED;
+  --color-cream-card: #FFFFFF;
+  --color-text-primary: #2C2C2A;
+  --color-text-secondary: #5F5E5A;
+  --color-text-tertiary: #888780;
+  --color-border: #E7E5DC;
+
+  --color-blue-50: #E6F1FB;
+  --color-blue-200: #B5D4F4;
+  --color-blue-400: #85B7EB;
+  --color-blue-600: #185FA5;
+  --color-blue-800: #0C447C;
+  --color-blue-950: #042C53;
+
+  --color-amber-bg: #FAEEDA;
+  --color-amber-text: #633806;
+  --color-amber-dot: #BA7517;
+
+  --color-green-dot: #1D9E75;
+
+  --color-task-bg: #F1EFE8;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-cream);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white border border-border text-text-primary rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-cream transition-colors;
+  }
+  .input-field {
+    @apply w-full border border-border rounded-lg px-3 py-2.5 text-sm bg-white text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 transition-all;
+  }
+  .card {
+    @apply bg-white border border-border rounded-xl;
+  }
+  .badge {
+    @apply text-xs px-2 py-0.5 rounded-md font-medium;
+  }
+}
