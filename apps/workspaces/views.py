@@ -9,6 +9,7 @@ from .models import WorkSpace, WorkSpaceMember
 from django.shortcuts import get_object_or_404
 from .serializers import WorkSpaceSerializer, WorkSpaceMemberSerializer
 from .permissions import IsWorkSpaceOwner, IsWorkSpaceAdminOrOwner
+from apps.projects.permissions import IsWorkSpaceMember
 
 from apps.projects.models import Project
 from apps.tasks.models import Task
@@ -44,7 +45,7 @@ class WorkSpaceDetailView(APIView):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            return [IsAuthenticated()]
+            return [IsWorkSpaceMember()]
         elif self.request.method == 'PATCH':
             return [IsWorkSpaceAdminOrOwner()]
         elif self.request.method == 'DELETE':
