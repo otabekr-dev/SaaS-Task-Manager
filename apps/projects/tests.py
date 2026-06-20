@@ -55,7 +55,7 @@ class ProjectCreateCase(APITestCase):
         response = self.client.get(f'/api/workspaces/{self.workspace_id}/projects/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data), 1)
+        self.assertEqual(len(response.data), 1)
 
     def test_member_cannot_create_project(self):
         self.client.force_authenticate(user=self.member)
