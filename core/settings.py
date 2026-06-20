@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"postgresql://{config('db_user')}:{config('db_pass')}@{config('db_host')}:{config('db_port')}/{config('db_name')}",
+        default=os.environ.get('DATABASE_URL'),
         conn_max_age=600
     )
 }
