@@ -1,3 +1,4 @@
+import dj_database_url
 from decouple import config, Csv
 from pathlib import Path
 
@@ -75,15 +76,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('db_name'),
-        'PORT': config('db_port'),
-        'USER': config('db_user'),
-        'HOST': config('db_host'),
-        'PASSWORD': config('db_pass')
-    }
+    'default': dj_database_url.config(
+        default=f"postgresql://{config('db_user')}:{config('db_pass')}@{config('db_host')}:{config('db_port')}/{config('db_name')}",
+        conn_max_age=600
+    )
 }
 
 
